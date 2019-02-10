@@ -7,7 +7,7 @@ The MADDPG implementation was used to solve the [Tennis environment](https://git
 
 ## Solution
 
-MADDPG differs from its original DDPG version in a way that each agent in MADDPG has its own actor and critic but share common experience replay buffer which contains tuples with states and actions from all agents. Each agent does its sampling from this shared replay buffer allowing agents to learn their reward function but incorporate the actions of other agents in their learning.
+In the MADDPG model, each agent is treated as an “actor” which gets advice from a “critic” that helps the actor decide what actions to reinforce during training. To goal of the critic is to try to predict the value(i.e. the reward we expect to get in the future) of an action in a particular state, which is used by the agent — the actor — to update its policy. By using predictions of future rewards, MADDPG injects some stability over time compared to traditional reinforcement learning methods as the actual rewards can vary considerably in multi-agent environments. To make it feasible to train multiple agents that can act in a globally-coordinated way, MADDPG allow critics to access the observations and actions of all the agents. The following diagram illustrates the basic constructs of the MADDPG model[3].
 
 ### Hyperparameters
 
@@ -24,16 +24,21 @@ The following hyperparameters were used:
   - Epsilon start value of 5, decay factor was set to 0.997
 
 
-MADDPG algorithm was able to solve the modified Unity Tennis environment in about 1000 episodes consistently. Here is the algorithms rewards(score) plot captured during the training episodes: 
-![](plot.png)
+MADDPG algorithm was able to solve the modified Unity Tennis environment in about 1000 episodes consistently. Here is the algorithms rewards(score) plot captured during the training episodes:
+
+![Training Scores](plot.png)
 
 ### Future Ideas
+Some ideas to try in the future are:
 
-Next logical step would be to implement Prioritized Experience Replay and to see how it affects agents learning. 
-Another idea would be to experiment with four agents, essentially playing tennis doubles.
+  - Implement Multi Agent Proximal Policy Optimization (MAPPO) and compare to MADDPG. 
+  - Implement Prioritized Experience Replay and to see how it affects agents learning. 
+
 
 ### References
 
 [1][Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments](https://arxiv.org/pdf/1706.02275.pdf) paper (Ryan Lowe, Yi Wu, et al)[1]
 
 [2][Continuous Control with Deep Reinforcement Learning](https://arxiv.org/pdf/1509.02971.pdf) paper (Lillicrap et al)
+
+[3][The Coopetition Dilemma: Building Reinforcement Learning Agents that Learn to Collaborate and Compete at the Same Time](https://towardsdatascience.com/the-coopetition-dilemma-building-reinforcement-learning-agents-that-learn-to-collaborate-and-84f2b2acb186)
